@@ -5,8 +5,8 @@
 # Dev build
 build/
 tmp/
+/bin/
 
-# Test
 *.exe
 *.out
 
