@@ -136,55 +136,6 @@ Once the application is running, visit the Swagger documentation at:
 http://localhost:3001/docs/
 ```
 
-## API Endpoints
-
-### Authentication
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/auth/register` | Register new user | ❌ |
-| POST | `/api/auth/login` | Login user | ❌ |
-| POST | `/api/auth/logout` | Logout user | ✅ |
-
-### Users
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/api/users` | Get all users | ✅ Admin |
-| GET | `/api/users/:id` | Get user by ID | ✅ Admin |
-| PUT | `/api/users/:id` | Update user | ✅ Admin |
-| DELETE | `/api/users/:id` | Delete user | ✅ Admin |
-
-### Authors
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/api/authors` | Get all authors | ❌ |
-| GET | `/api/authors/:id` | Get author by ID | ❌ |
-| POST | `/api/authors` | Create new author | ✅ |
-| PUT | `/api/authors/:id` | Update author | ✅ |
-| DELETE | `/api/authors/:id` | Delete author | ✅ |
-
-### Books
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/api/books` | Get all books | ❌ |
-| GET | `/api/books/:id` | Get book by ID | ❌ |
-| POST | `/api/books` | Create new book | ✅ |
-| PUT | `/api/books/:id` | Update book | ✅ |
-| DELETE | `/api/books/:id` | Delete book | ✅ |
-
-### Root
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/api/root` | Get all root items | ❌ |
-| GET | `/api/root/:id` | Get root by ID | ❌ |
-| POST | `/api/root` | Create root | ✅ |
-| PUT | `/api/root/:id` | Update root | ✅ |
-| DELETE | `/api/root/:id` | Delete root | ✅ |
-
 ## Authentication
 
 This API uses JWT (JSON Web Tokens) for authentication. To access protected endpoints:
@@ -196,76 +147,6 @@ This API uses JWT (JSON Web Tokens) for authentication. To access protected endp
 ```
 Authorization: Bearer <your_jwt_token>
 ```
-
-## Example Requests
-
-### Register a new user
-
-```bash
-curl -X POST http://localhost:3001/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "username": "john_doe",
-    "password": "SecurePassword123"
-  }'
-```
-
-### Login
-
-```bash
-curl -X POST http://localhost:3001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "username": "john_doe",
-    "password": "SecurePassword123"
-  }'
-```
-
-### Create an author (requires authentication)
-
-```bash
-curl -X POST http://localhost:3001/api/authors \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <your_jwt_token>" \
-  -d '{
-    "name": "J.K. Rowling",
-    "bio": "British author, best known for Harry Potter series",
-    "birth_date": "1965-07-31"
-  }'
-```
-
-### Get all books
-
-```bash
-curl -X GET http://localhost:3001/api/books
-```
-
-## Database Models
-
-### User
-- `id` (UUID)
-- `username` (string, unique)
-- `password` (string, hashed)
-- `token_version` (int)
-- `is_admin` (boolean)
-- `created_at` (timestamp)
-
-### Author
-- `id` (UUID)
-- `name` (string)
-- `bio` (string)
-- `birth_date` (string, format: YYYY-MM-DD)
-- `created_at` (timestamp)
-- `updated_at` (timestamp)
-
-### Book
-- `id` (UUID)
-- `title` (string)
-- `isbn` (string)
-- `publish_year` (int)
-- `author_id` (UUID, foreign key)
-- `created_at` (timestamp)
-- `updated_at` (timestamp)
 
 ## Development
 
