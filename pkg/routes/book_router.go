@@ -8,9 +8,6 @@ import (
 
 func bookRouter(router fiber.Router) {
 	router.Get("/", handlers.GetBooks)
+	router.Post("/", handlers.CreateBook)
 	router.Get("/authors", handlers.GetBooksWithAuthor)
-	// router.Get("/books/:id", getBook)
-	// router.Post("/books", createBook)
-	// router.Put("/books/:id", updateBook)
-	// router.Delete("/books/:id", deleteBook)
 }

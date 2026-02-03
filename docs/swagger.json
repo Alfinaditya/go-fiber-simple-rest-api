@@ -124,10 +124,7 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Author created successfully",
-                        "schema": {
-                            "$ref": "#/definitions/dto.DataResponse-models_Author"
-                        }
+                        "description": "Author created successfully"
                     },
                     "400": {
                         "description": "Bad request / validation error",
@@ -308,6 +305,58 @@
                         "description": "List of books",
                         "schema": {
                             "$ref": "#/definitions/dto.GetBooksResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Create a new book with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Create a new book",
+                "parameters": [
+                    {
+                        "description": "Book information",
+                        "name": "author",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateBookRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Book created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request / validation error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ValidationErrorResponse"
                         }
                     },
                     "401": {
@@ -641,6 +690,31 @@
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 2
+                }
+            }
+        },
+        "dto.CreateBookRequest": {
+            "type": "object",
+            "required": [
+                "author_id",
+                "isbn",
+                "publish_year",
+                "title"
+            ],
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "isbn": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "publish_year": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 100
                 }
             }
         },

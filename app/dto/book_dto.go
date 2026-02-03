@@ -26,6 +26,13 @@ type BookWithAuthorResponse struct {
 	Author      AuthorResponse `json:"author"`
 }
 
+type CreateBookRequest struct {
+	Title       string    `json:"title" validate:"required,max=100"`
+	ISBN        string    `json:"isbn" validate:"required,max=500"`
+	PublishYear int       `json:"publish_year" validate:"required"`
+	AuthorId    uuid.UUID `json:"author_id" validate:"required"`
+}
+
 type GetBooksResponse struct {
 	ListResponse[[]BookResponse]
 }

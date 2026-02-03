@@ -81,6 +81,24 @@ definitions:
     - birth_date
     - name
     type: object
+  dto.CreateBookRequest:
+    properties:
+      author_id:
+        type: string
+      isbn:
+        maxLength: 500
+        type: string
+      publish_year:
+        type: integer
+      title:
+        maxLength: 100
+        type: string
+    required:
+    - author_id
+    - isbn
+    - publish_year
+    - title
+    type: object
   dto.DataResponse-models_Author:
     properties:
       data:
@@ -337,8 +355,6 @@ paths:
       responses:
         "201":
           description: Author created successfully
-          schema:
-            $ref: '#/definitions/dto.DataResponse-models_Author'
         "400":
           description: Bad request / validation error
           schema:
@@ -466,6 +482,39 @@ paths:
       security:
       - Bearer: []
       summary: Get all books
+      tags:
+      - Books
+    post:
+      consumes:
+      - application/json
+      description: Create a new book with the provided information
+      parameters:
+      - description: Book information
+        in: body
+        name: author
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Book created successfully
+        "400":
+          description: Bad request / validation error
+          schema:
+            $ref: '#/definitions/dto.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Create a new book
       tags:
       - Books
   /api/books/with-authors:

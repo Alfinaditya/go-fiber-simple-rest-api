@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/app/dto"
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/app/models"
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/app/queries"
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/pkg/utils"
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/platform/database"
-	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -48,7 +49,7 @@ func GetAuthors(c *fiber.Ctx) error {
 // @Produce json
 // @Security Bearer
 // @Param author body dto.CreateAuthorRequest true "Author information"
-// @Success 201 {object} dto.DataResponse[models.Author] "Author created successfully"
+// @Success 201 "Author created successfully"
 // @Failure 400 {object} dto.ValidationErrorResponse "Bad request / validation error"
 // @Failure 401 {object} dto.BaseResponse "Unauthorized"
 // @Failure 500 {object} dto.BaseResponse "Internal server error"
@@ -84,9 +85,8 @@ func CreateAuthor(c *fiber.Ctx) error {
 		)
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(
-		dto.NewDataResponse(author, "Author created successfully"),
-	)
+	return c.SendStatus(fiber.StatusCreated)
+
 }
 
 // UpdateAuthor godoc

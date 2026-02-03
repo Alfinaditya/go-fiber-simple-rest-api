@@ -2,8 +2,11 @@ package handlers
 
 import (
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/app/dto"
+	"github.com/Alfinaditya/go-fiber-simple-rest-api/app/models"
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/app/queries"
+	"github.com/Alfinaditya/go-fiber-simple-rest-api/pkg/utils"
 	"github.com/Alfinaditya/go-fiber-simple-rest-api/platform/database"
+	"github.com/google/uuid"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -86,4 +89,52 @@ func GetBooksWithAuthor(c *fiber.Ctx) error {
 		}
 	}
 	return c.JSON(dto.NewListResponse(bookResponses, len(bookResponses), ""))
+}
+
+// CreateBook godoc
+// @Summary Create a new book
+// @Description Create a new book with the provided information
+// @Tags Books
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Param author body dto.CreateBookRequest true "Book information"
+// @Success 201 "Book created successfully"
+// @Failure 400 {object} dto.ValidationErrorResponse "Bad request / validation error"
+// @Failure 401 {object} dto.BaseResponse "Unauthorized"
+// @Failure 500 {object} dto.BaseResponse "Internal server error"
+// @Router /api/books [post]
+func CreateBook(c *fiber.Ctx) error {
+	db := database.GetDB()
+
+	authorQueries := queries.NewBookQueries(db)
+
+	var req dto.CreateBookRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(
+			dto.ErrorResponse("Cannot parse JSON request body"),
+		)
+	}
+
+	if errors := utils.ValidateStruct(req); errors != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(
+			dto.ValidationErrorResponseFunc(errors),
+		)
+	}
+
+	author := models.Book{
+		ID:          uuid.Must(uuid.NewV7()),
+		Title:       req.Title,
+		ISBN:        req.ISBN,
+		PublishYear: req.PublishYear,
+		AuthorID:    req.AuthorId,
+	}
+
+	if err := authorQueries.CreateBook(&author); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			dto.ErrorResponse("Failed to create book"),
+		)
+	}
+
+	return c.SendStatus(fiber.StatusCreated)
 }
