@@ -7,7 +7,7 @@ build/
 tmp/
 
 # Test
-*.out
+*.exe
 *.out
 
 # Environment variables
